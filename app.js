@@ -11,8 +11,10 @@ let state = {
 function resetState () {
   state.board = [];
   for (let i = 0; i < 7; i++) {
-    board.push([])
+    state.board.push([], [], [], [], [], [])
+    
   };
+  console.log(state.board)
 };
 
 // ***************** DOM SELECTORS *****************
@@ -21,5 +23,19 @@ let boardElem = document.querySelector('#board');
 
 // ***************** DOM MANIPULATION FUNCTIONS *****************
 function renderBoard () {
-    boardElem.innerText = '';
+  boardElem.innerText = '';
+  for(let i = 0; i < state.board.length; i++) {
+    let col = state.board[i]
+    //create a row
+    let colElem = document.createElement('div');
+    colElem.classList.add('col');
+    colElem.dataset.index = i;
+    colElem.innerHTML = col;
+    boardElem.appendChild(colElem);
+  }
+
 }
+
+// ***************** BOOTSTRAPPING *****************
+resetState();
+renderBoard();
