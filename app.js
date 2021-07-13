@@ -69,7 +69,7 @@ const playerMove = (event) => {
   //UNCOMMENT BELOW AFTER FIGURING OUT VERSUSCPU FUNCTION
   // else if (event.target.className === 'circle' && p2Turn && !p1Turn && vsCPU) {
   //   versusCPU ();
-  //   target.className = playerTurn;
+  //   target.className = playerMove;
   //   p1Turn = true;
   //   p2Turn = false;
   //   playerTurn = 'p1-red move'

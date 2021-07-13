@@ -21,8 +21,8 @@ body {
   flex-wrap: wrap;
   justify-content: space-around;
   align-items: center;
-  width: 512px;
-  height: 400px;
+  width: 480px;
+  height: 380px;
   background-image: radial-gradient(#00c9ec, #004094);
   border-radius: 8px;
   box-shadow: 0 0 5px #ff0000;
@@ -32,7 +32,7 @@ body {
   color: #ff0000;
   font-family: "Encode Sans SC", sans-serif;
   font-weight: 900;
-  font-size: 38px;
+  font-size: 48px;
   text-shadow:
     -1px -1px 0 #ffffff, 
     1px -1px 0 #ffffff,
@@ -49,8 +49,8 @@ main {
 .circle {
   display: flex;
   align-content: center;
-  width: 34px;
-  height: 34px;
+  width: 28px;
+  height: 28px;
   background-color: #000546;
   border-radius: 50%;
   padding: 8px;
@@ -60,8 +60,8 @@ main {
 .move {    
   display: flex;
   align-content: center;
-  width: 34px;
-  height: 34px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   padding: 8px;
   margin: 8px;
@@ -83,7 +83,7 @@ main {
   margin-top: 20px;
   padding: 8px;
   background-color: #000546;
-  width: 500px;
+  width: 480px;
   height: 56px;
   color: #ffffff;
   /* border: 1px solid #ffffff; */
@@ -95,7 +95,8 @@ main {
     1px 1px 0 #ff0000;
   font-family: "Encode Sans SC", sans-serif;
   font-size: 32px;    
-  font-weight: bold;   
+  font-weight: bold;
+  text-align: center;   
 }
 
 .p1name {
@@ -106,7 +107,7 @@ main {
   color: #ffffff;
   border-radius: 20px;
   text-align: center;
-  font-size: 16px;
+  font-size: 21px;
   font-family: "Encode Sans SC", sans-serif;  
   border: 1px solid #ffffff;
   text-shadow:
@@ -119,7 +120,7 @@ main {
 .p1name::placeholder {
   color: #ffffffd3;  
   font-weight: bold;
-  font-size: 14px;
+  font-size: 18px;
   font-style: italic;
   font-family: "Encode Sans SC", sans-serif;
   text-shadow:
@@ -134,7 +135,7 @@ main {
 }
 
 .p1name:hover {
-  transform: scale(1.15, 1.15);
+  transform: scale(1.10, 1.10);
   box-shadow:
     -1px -1px 0 #ff0000, 
     1px -1px 0 #ff0000,
@@ -150,7 +151,7 @@ main {
   color: #ffffff;
   border-radius: 20px;
   text-align: center;
-  font-size: 16px;
+  font-size: 21px;
   font-family: "Encode Sans SC", sans-serif;  
   border: 1px solid #ffffff;
   text-shadow:
@@ -167,7 +168,7 @@ main {
 .p2name::placeholder {
   color: #ffffffd3;    
   font-weight: bold;
-  font-size: 14px;
+  font-size: 18px;
   font-style: italic;
   font-family: "Encode Sans SC", sans-serif;
   text-shadow:
@@ -178,7 +179,7 @@ main {
 }
 
 .p2name:hover {
-  transform: scale(1.15, 1.15);
+  transform: scale(1.10, 1.10);
   box-shadow:
     -1px -1px 0 #ffff00, 
     1px -1px 0 #ffff00,
