@@ -129,8 +129,17 @@ main {
     1px 1px 0 #004094;  
 }
 
+.p1name:focus {
+  outline: none;
+}
+
 .p1name:hover {
   transform: scale(1.15, 1.15);
+  box-shadow:
+    -1px -1px 0 #ff0000, 
+    1px -1px 0 #ff0000,
+    -1px 1px 0 #ff0000,
+    1px 1px 0 #ff0000;
 }
 
 .p2name {
@@ -151,6 +160,10 @@ main {
     1px 1px 0 #004094;
 }
 
+.p2name:focus {
+  outline: none;
+}
+
 .p2name::placeholder {
   color: #ffffffd3;    
   font-weight: bold;
@@ -166,6 +179,11 @@ main {
 
 .p2name:hover {
   transform: scale(1.15, 1.15);
+  box-shadow:
+    -1px -1px 0 #ffff00, 
+    1px -1px 0 #ffff00,
+    -1px 1px 0 #ffff00,
+    1px 1px 0 #ffff00;
 }
 
 .start {
@@ -188,4 +206,9 @@ main {
 
 .start:hover {
   transform: scale(1.35, 1.35);
+  box-shadow:
+    -1px -1px 0 #51ff00, 
+    1px -1px 0 #51ff00,
+    -1px 1px 0 #51ff00,
+    1px 1px 0 #51ff00;
 }

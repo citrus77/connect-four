@@ -6,7 +6,7 @@ console.log('testElem: ', testElem);
 let state = {};
 
 //Set game state
-function resetState() {
+const resetState = () =>{
   state.board = [];
   //Create 7 arrays each containing 6 arrays
   for (let i = 0; i < 7; i++) {
@@ -18,21 +18,22 @@ function resetState() {
   state.playerNames = ['', ''];
   state.currentPlayerIdx = 0;
   state.getCurrentPlayer = () => state.playerNames[state.currentPlayerIdx];
+  state.inProgress = false;
   state.p1Turn = true;
   state.p2Turn = false;
   state.vsCPU = false;
-  state.playerTurn = 'p1-red move';
+  state.playerMove = 'p1-red move';
   // console.log(state.board);
 };
 
 
 // ***************** DOM SELECTORS *****************
-let boardElem = document.querySelector('#board');
-let playerTurnElem = document.querySelector('#player-turn');
+const boardElem = document.querySelector('#board');
+const playerTurnElem = document.querySelector('#player-turn');
 
 
 // ***************** DOM MANIPULATION FUNCTIONS *****************
-function renderBoard() {
+const renderBoard = () => {
   boardElem.innerText = '';
   //create columns and rows on DOM
   for (let i = 0; i < state.board.length; i++) {
@@ -41,7 +42,7 @@ function renderBoard() {
       let circle = column[j]
       let cirElem = document.createElement('div');
       cirElem.classList.add('circle');
-      cirElem.dataset.index = j;
+      cirElem.dataset.index = [i, j];
       cirElem.innerHTML = circle;
       boardElem.appendChild(cirElem);
     };
@@ -49,23 +50,23 @@ function renderBoard() {
 };
 
 //Change player turns when move made
-function playerMove(event) {
+const playerMove = (event) => {
   const target = event.target
-  if (event.target.className === 'circle' && state.p1Turn && !state.p2Turn) {
-    target.className = state.playerTurn;
+  if (event.target.className === 'circle' && state.inProgress && state.p1Turn && !state.p2Turn) {
+    target.className = state.playerMove;
     state.p1Turn = false;
     state.p2Turn = true;
-    state.playerTurn = 'p2-yellow move'
+    state.playerMove = 'p2-yellow move'
     state.currentPlayerIdx = 1;
   }
-  else if (event.target.className === 'circle' && state.p2Turn && !state.p1Turn && !state.vsCPU) {
-    target.className = state.playerTurn;
+  else if (event.target.className === 'circle' && state.inProgress && state.p2Turn && !state.p1Turn && !state.vsCPU) {
+    target.className = state.playerMove;
     state.p1Turn = true;
     state.p2Turn = false;
-    state.playerTurn = 'p1-red move'
+    state.playerMove = 'p1-red move'
     state.currentPlayerIdx = 0;
   }
-  //UNCOMMENT BELOW AFTER FIGURING OUT VSCPU FUNCTION
+  //UNCOMMENT BELOW AFTER FIGURING OUT VERSUSCPU FUNCTION
   // else if (event.target.className === 'circle' && p2Turn && !p1Turn && vsCPU) {
   //   versusCPU ();
   //   target.className = playerTurn;
@@ -92,6 +93,18 @@ const renderPlayer = () => {
   playerTurnElem.innerHTML = text;
 }
 
+// ************** GAME LOGIC FUNCTIONS **********
+const checkMove = () => {
+  
+};
+
+const checkWin = () => {
+  
+};
+
+const versusCPU = () => {
+
+}
 
 // ************** HELPER FUNCTIONS **************
 const render = () => {
@@ -99,24 +112,57 @@ const render = () => {
   renderPlayer();
 }
 
-function checkMove () {
-  
-};
+const check = () => {
+  checkMove();
+  checkWin();
+}
 
+const startGame = (event) => {
+  if (event.target.className !== 'start') {
+    state.inProgress = true;
+    return;
+  }
+  const player1Input = document.querySelector('input[name=player1]');
+  state.playerNames[0] = player1Input.value;
+  const player2Input = document.querySelector('input[name=player2]');
+  state.playerNames[1] = player2Input.value;
+  //Randomly choose first player and set player
+  const startFirst = Math.round(Math.random())
+  state.currentPlayerIdx = startFirst;
+  if (startFirst === 0) {
+    state.p1Turn = true;
+    state.p2Turn = false;
+    state.playerMove = 'p1-red move'
+  } else {
+    state.p1Turn = false;
+    state.p2Turn = true;
+    state.playerMove = 'p2-yellow move';
+  };
+
+  render();  
+}
+
+//SHUFFLE FUNCTION BORROWED FROM;
+//https://bost.ocks.org/mike/shuffle
+const shuffle = (array) => {
+  let m = array.length, t, i;
+  while (m) {
+    i = Math.floor(Math.random() * m--);
+    t = array[m];
+    array[m] = array[i];
+    array[i] = t;
+  };  
+  return array;
+};
 
 // **************** EVENT LISTERNERS *****************
 board.addEventListener('click', function (event) {
   playerMove(event);
 });
 
-playerTurnElem.addEventListener('click', function(event) {
-  if (event.target.className !== 'start') return;
-  const player1Input = document.querySelector('input[name=player1]');
-  state.playerNames[0] = player1Input.value;
-  const player2Input = document.querySelector('input[name=player2]');
-  state.playerNames[1] = player2Input.value;
-  render();  
-})
+playerTurnElem.addEventListener('click', function(event){
+  startGame (event);
+}) 
 
 // ***************** BOOTSTRAPPING *****************
 resetState();
