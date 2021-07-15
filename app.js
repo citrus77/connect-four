@@ -1,6 +1,6 @@
 // testing
 let testElem = document.querySelector('#board');
-console.log('testElem: ', testElem);
+console.log(`testElem: `, testElem);
 
 // ***************** STATE *****************
 let state = {};
@@ -9,12 +9,11 @@ let state = {};
 const resetState = () =>{
   state.board = [];
   //Create 7 arrays each containing 6 arrays
-  for (let i = 0; i < 7; i++) {
-    state.board.push([[], [], [], [], [], []])
+  for (let i = 0; i < 6; i++) {
+    state.board.push(['circle', 'circle', 'circle', 'circle', 'circle', 'circle', 'circle'])
   };  
   state.board = state.board;
   //Vars for use in functions
-  state.players = ['1pRed', '2pYellow'];
   state.playerNames = ['', ''];
   state.currentPlayerIdx = 0;
   state.getCurrentPlayer = () => state.playerNames[state.currentPlayerIdx];
@@ -22,7 +21,8 @@ const resetState = () =>{
   state.p1Turn = true;
   state.p2Turn = false;
   state.vsCPU = false;
-  state.playerMove = 'p1-red move';
+  state.playerMove = 'p1-red';
+  state.scores = [0, 0];
   // console.log(state.board);
 };
 
@@ -30,40 +30,44 @@ const resetState = () =>{
 // ***************** DOM SELECTORS *****************
 const boardElem = document.querySelector('#board');
 const playerTurnElem = document.querySelector('#player-turn');
+const scoreElem1 = document.querySelector('#score-p1');
+const scoreElem2 = document.querySelector('#score-p2');
+// const playerPosElem = document.querySelector('data-coordinates')
 
 
 // ***************** DOM MANIPULATION FUNCTIONS *****************
 const renderBoard = () => {
-  boardElem.innerText = '';
+  boardElem.innerHTML = '';  
   //create columns and rows on DOM
-  for (let i = 0; i < state.board.length; i++) {
-    let column = state.board[i]
-    for (let j = 0; j < column.length; j++) {
-      let circle = column[j]
-      let cirElem = document.createElement('div');
-      cirElem.classList.add('circle');
-      cirElem.dataset.index = [i, j];
-      cirElem.innerHTML = circle;
-      boardElem.appendChild(cirElem);
+  for (let rowIdx = 0; rowIdx < state.board.length; rowIdx++) {
+    let column = state.board[rowIdx]
+    for (let colIdx = 0; colIdx < column.length; colIdx++) {
+      let circle = column[colIdx]
+      // console.log(circle)
+      let circElem = document.createElement('div');
+      circElem.classList.add(circle);
+      circElem.dataset.coordinates = `${rowIdx},${colIdx}`;
+      boardElem.appendChild(circElem);
     };
   };
 };
+
 
 //Change player turns when move made
 const playerMove = (event) => {
   const target = event.target
   if (event.target.className === 'circle' && state.inProgress && state.p1Turn && !state.p2Turn) {
-    target.className = state.playerMove;
+    dropInCol(event);
     state.p1Turn = false;
     state.p2Turn = true;
-    state.playerMove = 'p2-yellow move'
+    state.playerMove = 'p2-yellow'
     state.currentPlayerIdx = 1;
   }
   else if (event.target.className === 'circle' && state.inProgress && state.p2Turn && !state.p1Turn && !state.vsCPU) {
-    target.className = state.playerMove;
+    dropInCol(event);
     state.p1Turn = true;
     state.p2Turn = false;
-    state.playerMove = 'p1-red move'
+    state.playerMove = 'p1-red'
     state.currentPlayerIdx = 0;
   }
   //UNCOMMENT BELOW AFTER FIGURING OUT VERSUSCPU FUNCTION
@@ -72,11 +76,12 @@ const playerMove = (event) => {
   //   target.className = playerMove;
   //   p1Turn = true;
   //   p2Turn = false;
-  //   playerTurn = 'p1-red move'
+  //   playerTurn = 'p1-red'
   //   state.currentPlayerIdx = 0;
   // }
-  renderPlayer();
+  render()
 };
+
 
 //Render player name inputs and game message
 const renderPlayer = () => {
@@ -93,50 +98,82 @@ const renderPlayer = () => {
   playerTurnElem.innerHTML = text;
 }
 
+const renderScore = () => {
+  scoreElem1.innerHTML = `
+    <div class="score">P1</div>
+    <div class="score">${state.playerNames[0]}</div>
+    <div class="score">Wins: ${state.scores[0]}</div>    
+  `;
+  scoreElem2.innerHTML = `
+    <div class="score">P2</div>
+    <div class="score">${state.playerNames[1]}</div>
+    <div class="score">Wins: ${state.scores[1]}</div>    
+  `;
+}
+
+
 // ************** GAME LOGIC FUNCTIONS **********
-const checkMove = () => {
-  
+const dropInCol = (event) => {
+  const checkElem = event.target;
+  const [y, x] = checkElem.dataset.coordinates.split(',');
+  console.log([y, x]);
+  // state.board[y][x] = state.playerMove;
+  for (let rowIdx = 0; rowIdx < state.board.length; rowIdx++) {
+    // console.log(rowIdx, x)
+    if (state.board[rowIdx][x] !== 'circle') {
+      // console.log('lastcell: ',state.board[rowIdx][x])
+      state.board[rowIdx-1][x] = state.playerMove;
+    } 
+    else if (rowIdx === 5) {
+      state.board[rowIdx][x] = state.playerMove;        
+    };
+  };
 };
 
+/*
 const checkWin = () => {
   
 };
 
 const versusCPU = () => {
 
-}
+};
+*/
+
 
 // ************** HELPER FUNCTIONS **************
 const render = () => {
+  renderScore();
   renderBoard();
   renderPlayer();
-}
+};
 
 const check = () => {
   checkMove();
   checkWin();
-}
+};
 
 const startGame = (event) => {
   if (event.target.className !== 'start') {
     state.inProgress = true;
     return;
   }
+
   const player1Input = document.querySelector('input[name=player1]');
   state.playerNames[0] = player1Input.value;
   const player2Input = document.querySelector('input[name=player2]');
   state.playerNames[1] = player2Input.value;
+
   //Randomly choose first player and set player
   const startFirst = Math.round(Math.random())
   state.currentPlayerIdx = startFirst;
   if (startFirst === 0) {
     state.p1Turn = true;
     state.p2Turn = false;
-    state.playerMove = 'p1-red move'
   } else {
     state.p1Turn = false;
     state.p2Turn = true;
-    state.playerMove = 'p2-yellow move';
+    state.playerMove = 'p2-yellow';
   };
 
   render();  
@@ -156,13 +193,9 @@ const shuffle = (array) => {
 };
 
 // **************** EVENT LISTERNERS *****************
-board.addEventListener('click', function (event) {
-  playerMove(event);
-});
+board.addEventListener('click', playerMove);
 
-playerTurnElem.addEventListener('click', function(event){
-  startGame (event);
-}) 
+playerTurnElem.addEventListener('click', startGame);
 
 // ***************** BOOTSTRAPPING *****************
 resetState();

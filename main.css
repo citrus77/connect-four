@@ -17,7 +17,7 @@ body {
 
 .app {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-around;
   align-items: center;
@@ -46,32 +46,46 @@ main {
   align-items: center;
 }
 
+.score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #ffffff;
+  font-family: "Encode Sans SC", sans-serif;
+  font-weight: 600;
+  font-size: 32px;
+}
+
 .circle {
   display: flex;
   align-content: center;
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
   background-color: #000546;
   border-radius: 50%;
   padding: 8px;
   margin: 8px;
 }
 
-.move {    
+.p1-red {    
   display: flex;
   align-content: center;
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   padding: 8px;
   margin: 8px;
-}
-
-.p1-red {
   background: radial-gradient(closest-side, #ff0000 90%, #004094 10%);
 }
 
-.p2-yellow {
+.p2-yellow {    
+  display: flex;
+  align-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  padding: 8px;
+  margin: 8px;
   background: radial-gradient(closest-side, #ffff00 90%, #004094 10%);
 }
 
@@ -86,7 +100,6 @@ main {
   width: 480px;
   height: 56px;
   color: #ffffff;
-  /* border: 1px solid #ffffff; */
   border-radius: 60px;
   text-shadow:
     -1px -1px 0 #ff0000, 
