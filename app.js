@@ -43,7 +43,6 @@ const renderBoard = () => {
     let column = state.board[rowIdx]
     for (let colIdx = 0; colIdx < column.length; colIdx++) {
       let circle = column[colIdx]
-      // console.log(circle)
       let circElem = document.createElement('div');
       circElem.classList.add(circle);
       circElem.dataset.coordinates = `${rowIdx},${colIdx}`;
@@ -53,17 +52,19 @@ const renderBoard = () => {
 };
 
 
-//Change player turns when move made
+//Make a move and change turns
 const playerMove = (event) => {
   const target = event.target
-  if (event.target.className === 'circle' && state.inProgress && state.p1Turn && !state.p2Turn) {
+  if (event.target.className === 'circle' && state.inProgress 
+  && state.p1Turn) {
     dropInCol(event);
     state.p1Turn = false;
     state.p2Turn = true;
     state.playerMove = 'p2-yellow'
     state.currentPlayerIdx = 1;
   }
-  else if (event.target.className === 'circle' && state.inProgress && state.p2Turn && !state.p1Turn && !state.vsCPU) {
+  else if (event.target.className === 'circle' && state.inProgress 
+  && state.p2Turn && !state.vsCPU) {
     dropInCol(event);
     state.p1Turn = true;
     state.p2Turn = false;
@@ -71,14 +72,16 @@ const playerMove = (event) => {
     state.currentPlayerIdx = 0;
   }
   //UNCOMMENT BELOW AFTER FIGURING OUT VERSUSCPU FUNCTION
-  // else if (event.target.className === 'circle' && p2Turn && !p1Turn && vsCPU) {
-  //   versusCPU ();
-  //   target.className = playerMove;
-  //   p1Turn = true;
-  //   p2Turn = false;
-  //   playerTurn = 'p1-red'
-  //   state.currentPlayerIdx = 0;
-  // }
+  /*
+  else if (event.target.className === 'circle' && p2Turn && !p1Turn && vsCPU) {
+    versusCPU ();
+    dropInCol(event);
+    state.p1Turn = true;
+    state.p2Turn = false;
+    state.playerMove = 'p1-red'
+    state.currentPlayerIdx = 0;
+  }
+  */
   render()
 };
 
@@ -96,7 +99,7 @@ const renderPlayer = () => {
     text = `It's currently ${state.getCurrentPlayer()}'s turn.`;
   }
   playerTurnElem.innerHTML = text;
-}
+};
 
 const renderScore = () => {
   scoreElem1.innerHTML = `
@@ -109,26 +112,25 @@ const renderScore = () => {
     <div class="score">${state.playerNames[1]}</div>
     <div class="score">Wins: ${state.scores[1]}</div>    
   `;
-}
+};
 
 
 // ************** GAME LOGIC FUNCTIONS **********
 const dropInCol = (event) => {
   const checkElem = event.target;
   const [y, x] = checkElem.dataset.coordinates.split(',');
-  console.log([y, x]);
-  // state.board[y][x] = state.playerMove;
   for (let rowIdx = 0; rowIdx < state.board.length; rowIdx++) {
-    // console.log(rowIdx, x)
     if (state.board[rowIdx][x] !== 'circle') {
-      // console.log('lastcell: ',state.board[rowIdx][x])
       state.board[rowIdx-1][x] = state.playerMove;
+      console.log(coords)
     } 
     else if (rowIdx === 5) {
-      state.board[rowIdx][x] = state.playerMove;        
+      state.board[rowIdx][x] = state.playerMove;
+      console.log(state.board[rowIdx][x])       
     };
   };
 };
+
 
 /*
 const checkWin = () => {
@@ -148,22 +150,15 @@ const render = () => {
   renderPlayer();
 };
 
-const check = () => {
-  checkMove();
-  checkWin();
-};
-
 const startGame = (event) => {
   if (event.target.className !== 'start') {
     state.inProgress = true;
     return;
   }
-
   const player1Input = document.querySelector('input[name=player1]');
   state.playerNames[0] = player1Input.value;
   const player2Input = document.querySelector('input[name=player2]');
   state.playerNames[1] = player2Input.value;
-
   //Randomly choose first player and set player
   const startFirst = Math.round(Math.random())
   state.currentPlayerIdx = startFirst;
@@ -175,9 +170,8 @@ const startGame = (event) => {
     state.p2Turn = true;
     state.playerMove = 'p2-yellow';
   };
-
   render();  
-}
+};
 
 //SHUFFLE FUNCTION BORROWED FROM;
 //https://bost.ocks.org/mike/shuffle
