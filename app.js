@@ -1,17 +1,17 @@
 // testing
-let testElem = document.querySelector('#board');
-console.log(`testElem: `, testElem);
+// let testElem = document.querySelector('#board');
+// console.log(`testElem: `, testElem);
 
 // ***************** STATE *****************
 let state = {};
 
 //Set game state
-const resetState = () =>{
+const resetState = () => {
   state.board = [];
-  //Create 7 arrays each containing 6 arrays
+  //Create 7 arrays each containing 6 'circle's
   for (let i = 0; i < 6; i++) {
     state.board.push(['circle', 'circle', 'circle', 'circle', 'circle', 'circle', 'circle'])
-  };  
+  };
   state.board = state.board;
   //Vars for use in functions
   state.playerNames = ['', ''];
@@ -21,7 +21,7 @@ const resetState = () =>{
   state.p1Turn = true;
   state.p2Turn = false;
   state.vsCPU = false;
-  state.playerMove = 'p1-red';
+  state.playerMove = 'p1move';
   state.scores = [0, 0];
   // console.log(state.board);
 };
@@ -37,7 +37,7 @@ const scoreElem2 = document.querySelector('#score-p2');
 
 // ***************** DOM MANIPULATION FUNCTIONS *****************
 const renderBoard = () => {
-  boardElem.innerHTML = '';  
+  boardElem.innerHTML = '';
   //create columns and rows on DOM
   for (let rowIdx = 0; rowIdx < state.board.length; rowIdx++) {
     let column = state.board[rowIdx]
@@ -55,20 +55,20 @@ const renderBoard = () => {
 //Make a move and change turns
 const playerMove = (event) => {
   const target = event.target
-  if (event.target.className === 'circle' && state.inProgress 
-  && state.p1Turn) {
+  if (event.target.className === 'circle' && state.inProgress
+    && state.p1Turn) {
     dropInCol(event);
     state.p1Turn = false;
     state.p2Turn = true;
-    state.playerMove = 'p2-yellow'
+    state.playerMove = 'p2move'
     state.currentPlayerIdx = 1;
   }
-  else if (event.target.className === 'circle' && state.inProgress 
-  && state.p2Turn && !state.vsCPU) {
+  else if (event.target.className === 'circle' && state.inProgress
+    && state.p2Turn && !state.vsCPU) {
     dropInCol(event);
     state.p1Turn = true;
     state.p2Turn = false;
-    state.playerMove = 'p1-red'
+    state.playerMove = 'p1move'
     state.currentPlayerIdx = 0;
   }
   //UNCOMMENT BELOW AFTER FIGURING OUT VERSUSCPU FUNCTION
@@ -78,7 +78,7 @@ const playerMove = (event) => {
     dropInCol(event);
     state.p1Turn = true;
     state.p2Turn = false;
-    state.playerMove = 'p1-red'
+    state.playerMove = 'p1move'
     state.currentPlayerIdx = 0;
   }
   */
@@ -89,7 +89,7 @@ const playerMove = (event) => {
 //Render player name inputs and game message
 const renderPlayer = () => {
   let text;
-  if(!state.playerNames[0] || !state.playerNames[1]) {
+  if (!state.playerNames[0] || !state.playerNames[1]) {
     text = `
       <input name="player1" class="p1name" placeholder="Enter Player 1">
       <input name="player2" class="p2name" placeholder="Enter Player 2">
@@ -121,22 +121,20 @@ const dropInCol = (event) => {
   const [y, x] = checkElem.dataset.coordinates.split(',');
   for (let rowIdx = 0; rowIdx < state.board.length; rowIdx++) {
     if (state.board[rowIdx][x] !== 'circle') {
-      state.board[rowIdx-1][x] = state.playerMove;
-      console.log(coords)
-    } 
+      state.board[rowIdx - 1][x] = state.playerMove;
+      return;
+    }
     else if (rowIdx === 5) {
       state.board[rowIdx][x] = state.playerMove;
-      console.log(state.board[rowIdx][x])       
     };
   };
 };
 
-
-/*
 const checkWin = () => {
   
 };
 
+/*
 const versusCPU = () => {
 
 };
@@ -168,10 +166,15 @@ const startGame = (event) => {
   } else {
     state.p1Turn = false;
     state.p2Turn = true;
-    state.playerMove = 'p2-yellow';
+    state.playerMove = 'p2move';
   };
-  render();  
+  render();
 };
+
+const isTaken = ([rowIdx, x]) => {
+  if ([y, x] === 'p1move' || [y][x] === 'p2move') return true;
+}
+
 
 //SHUFFLE FUNCTION BORROWED FROM;
 //https://bost.ocks.org/mike/shuffle
@@ -182,7 +185,7 @@ const shuffle = (array) => {
     t = array[m];
     array[m] = array[i];
     array[i] = t;
-  };  
+  };
   return array;
 };
 

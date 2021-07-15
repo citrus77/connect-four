@@ -74,7 +74,7 @@ main {
   margin: 8px;
 }
 
-.p1-red {    
+.p1move {    
   display: flex;
   align-content: center;
   width: 30px;
@@ -85,7 +85,7 @@ main {
   background: radial-gradient(closest-side, #ff0000 90%, #004094 10%);
 }
 
-.p2-yellow {    
+.p2move {    
   display: flex;
   align-content: center;
   width: 30px;
