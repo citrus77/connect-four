@@ -1,6 +1,3 @@
-// testing
-// let testElem = document.querySelector('#board');
-// console.log(`testElem: `, testElem);
 
 // ***************** STATE *****************
 let state = {};
@@ -10,8 +7,8 @@ const resetState = () => {
   state.board = [];
   //Create 7 arrays each containing 6 'circle's
   for (let i = 0; i < 6; i++) {
-    state.board.push(['circle', 'circle', 'circle', 'circle', 'circle', 'circle', 'circle'])
-  };
+    state.board.push(['circle' , 'circle' , 'circle' , 'circle' , 'circle' , 'circle' , 'circle']);
+  }
   state.board = state.board;
   //Vars for use in functions
   state.playerNames = ['', ''];
@@ -24,8 +21,8 @@ const resetState = () => {
   state.vsCPU = false;
   state.playerMove = 'p1move';
   state.scores = [0, 0];
+  state.singlePlayer = false;
 };
-
 
 // ***************** DOM SELECTORS *****************
 const boardElem = document.querySelector('#board');
@@ -33,34 +30,32 @@ const playerTurnElem = document.querySelector('#player-turn');
 const scoreElem1 = document.querySelector('#score-p1');
 const scoreElem2 = document.querySelector('#score-p2');
 
-
 // ***************** DOM MANIPULATION FUNCTIONS *****************
 const renderBoard = () => {
   boardElem.innerHTML = '';
   //create columns and rows on DOM
   for (let rowIdx = 0; rowIdx < state.board.length; rowIdx++) {
-    let column = state.board[rowIdx]
+    let column = state.board[rowIdx];
     for (let colIdx = 0; colIdx < column.length; colIdx++) {
-      let circle = column[colIdx]
+      let circle = column[colIdx];
       let circElem = document.createElement('div');
       circElem.classList.add(circle);
       circElem.dataset.coordinates = `${rowIdx},${colIdx}`;
       boardElem.appendChild(circElem);
-    };
-  };
+    }
+  }
 };
 
 //Render player name inputs and game message
 const renderPlayer = () => {
   let text;
-  if (!state.playerNames[0] || !state.playerNames[1]) {
+  if (!state.playerNames[0] || !state.playerNames[1] && !state.singlePlayer) {
     text = `
-      <input name='player1' class='p1name' placeholder='Enter Player 1'>
-      <input name='player2' class='p2name' placeholder='Enter Player 2'>
+      <input name='player1' class='p1name' id='p1Input' placeholder='Enter Player 1'>
+      <input name='player2' class='p2name' id='p2Input' placeholder='Enter Player 2'>
       <button class='start'>GO!</button>
     `;
-  }
-  else if (state.isDraw) {    
+  } else if (state.isDraw) {
     text = `
       <div class='next-game'>
         <span class='game-over'>The game is a draw!</span>   
@@ -68,19 +63,25 @@ const renderPlayer = () => {
         <button class='restart'>Restart Game</button>
       </div>
     `;
-  }
-  else if (!state.isDraw && !state.inProgress) {
+  } else if (!state.isDraw && !state.inProgress && checkP1Win()) {
     text = `
     <div class='next-game'>
-      <span class='game-over'>${state.getCurrentPlayer()} wins!</span> 
+      <span class='game-over'>${state.playerNames[0]} wins!</span> 
       <button class='reset'>Play Again!</button>
       <button class='restart'>Restart Game</button>
     </div>
     `;
+  } else if (!state.isDraw && !state.inProgress && checkP2Win()) {
+    text = `
+    <div class='next-game'>
+      <span class='game-over'>${state.playerNames[1]} wins!</span> 
+      <button class='reset'>Play Again!</button>
+      <button class='restart'>Restart Game</button>
+    </div>
+    `;
+  } else {
+    text = `It's currently ${state.getCurrentPlayer()}'s turn.`;
   }
-  else {
-    text = `It's currently ${state.getCurrentPlayer()}'s turn.`
-  };    
   playerTurnElem.innerHTML = text;
 };
 
@@ -98,14 +99,17 @@ const renderScore = () => {
 };
 
 //Make a move and change turns
+
 const playerMove = (event) => {
-  const target = event.target
+  const target = event.target;
+  //Check if computer won before making player move if single player
+  if (state.singlePlayer) checkWon();
   if (event.target.className === 'circle' && state.inProgress && state.p1Turn) {
     dropInCol(event);
     checkWon();
     state.p1Turn = false;
     state.p2Turn = true;
-    state.playerMove = 'p2move'
+    state.playerMove = 'p2move';
     state.currentPlayerIdx = 1;
   }
   else if (event.target.className === 'circle' && state.inProgress && state.p2Turn && !state.vsCPU) {
@@ -113,22 +117,11 @@ const playerMove = (event) => {
     checkWon();
     state.p1Turn = true;
     state.p2Turn = false;
-    state.playerMove = 'p1move'
+    state.playerMove = 'p1move';
     state.currentPlayerIdx = 0;
-  }
- 
-  //UNCOMMENT BELOW AFTER FIGURING OUT VERSUSCPU FUNCTION
-  /*
-  else if (event.target.className === 'circle' && p2Turn && !p1Turn && vsCPU) {
-    versusCPU ();
-    dropInCol(event);
-    state.p1Turn = true;
-    state.p2Turn = false;
-    state.playerMove = 'p1move'
-    state.currentPlayerIdx = 0;
-  }
-  */
-  render()
+  };
+  cpuMove();
+  render();
 };
 
 // ************** GAME LOGIC FUNCTIONS **********
@@ -147,49 +140,70 @@ const dropInCol = (event) => {
   };
 };
 
-// const versusCPU = () => {
-  
-// };
+const cpuMove = () => {
+  if (state.vsCPU && !state.p1Turn) {
+    state.currentPlayerIdx = 1;
+    state.playerNames[1] = 'Computer';    
+    //Check if player1 won before making computer move if single player
+    if (state.singlePlayer) checkWon();
+    let cy = Math.round(Math.floor(Math.random() * (5 - 0 + 1) + 0));
+    let cx = Math.round(Math.floor(Math.random() * (6 - 0 + 1) + 0));
+    const coords = [cy, cx];
+    for (let rowIdx = 0; rowIdx < 6; rowIdx++) {
+      if (state.board[rowIdx][cx] !== 'circle') {
+        state.board[rowIdx - 1][cx] = state.playerMove;        
+        state.p1Turn = true;
+        state.p2Turn = false;
+        state.playerMove = 'p1move';
+        state.currentPlayerIdx = 0;
+        return;
+      }
+      else if (rowIdx === 5) {
+        state.board[rowIdx][cx] = state.playerMove;        
+        state.p1Turn = true;
+        state.p2Turn = false;
+        state.playerMove = 'p1move';
+        state.currentPlayerIdx = 0;
+        return;
+      };
+      checkWon();      
+    };
+  }
+  else return;
+};
 
 //******* FUNCTIONS TO CHECK WHEN GAME OVER **********
 //If all spots are taken and none have 'circle' class declare draw
 const checkDraw = () => {
-  let count = 0
+  let count = 0;
   for (let y = 0; y < state.board.length; y++) {
     let rows = state.board[y];
-    for (let x = 0; x < rows.length; x++){
-      let cols = rows[x];    
+    for (let x = 0; x < rows.length; x++) {
+      let cols = rows[x];
       if (cols.includes('circle') || rows.includes('circle')) count++;
       if (count === 0) {
-        return true;   
+        return true;
       };
-    };         
+    };
   };
   return;
 };
 
-//If winner functions (moved to checkWin.js)
-//or checkDraw return true then game over
+//If checkWins (moved to checkWin.js) or checkDraw return true then game over
 const checkWon = () => {
   if (state.currentPlayerIdx === 0) checkP1Win();
   if (state.currentPlayerIdx === 1) checkP2Win();
-  //If player 1 wins
   if (checkP1Win()) {
     state.inProgress = false;
-    state.scores[0]++;    
-    console.log('Player1 Wins')
+    state.scores[0]++;
   };
-
   if (checkP2Win()) {
     state.inProgress = false;
     state.scores[1]++;
-    console.log('Player2 Wins')
   };
-
-  if (checkDraw()) {    
+  if (checkDraw()) {
     state.inProgress = false;
     state.isDraw = true;
-    console.log(`it's a draw`)
   };
 };
 
@@ -200,14 +214,13 @@ const render = () => {
   renderPlayer();
 };
 
-
-const startGame = () => {  
+const startGame = () => {
   const player1Input = document.querySelector('input[name=player1]');
   state.playerNames[0] = player1Input.value;
   const player2Input = document.querySelector('input[name=player2]');
   state.playerNames[1] = player2Input.value;
   //Randomly choose first player and set player
-  const startFirst = Math.round(Math.random())
+  const startFirst = Math.round(Math.random());
   state.currentPlayerIdx = startFirst;
   if (startFirst === 0) {
     state.p1Turn = true;
@@ -216,19 +229,21 @@ const startGame = () => {
     state.p1Turn = false;
     state.p2Turn = true;
     state.playerMove = 'p2move';
-  };
+  }
   render();
 };
-
-const gameOver = () => {
-  state.inProgress = false;
-}
 
 const playAgain = () => {
   state.board = [];
   for (let i = 0; i < 6; i++) {
-    state.board.push(['circle', 'circle', 'circle', 'circle', 'circle', 'circle', 'circle'])
+    state.board.push(['circle' , 'circle' , 'circle' , 'circle' , 'circle' , 'circle' , 'circle']);
   };
+  if (state.vsCPU) {
+    state.p1Turn = true;
+    state.p2Turn = false;
+    state.currentPlayerIdx = 0;
+    state.playerMove = 'p1move';
+  }
   state.board = state.board;
   state.inProgress = true;
   state.isDraw = false;
@@ -240,12 +255,18 @@ const restartGame = () => {
   render();
 };
 
-
 // **************** EVENT LISTERNERS *****************
 board.addEventListener('click', playerMove);
-playerTurnElem.addEventListener('click',function (event) {
+playerTurnElem.addEventListener('click', function (event) {
   if (event.target.className !== 'start') return;
   else state.inProgress = true;
+  let name1 = document.getElementById('p1Input').value
+  let name2 = document.getElementById('p2Input').value  
+  if (name2 === '') {
+    state.vsCPU = true;
+    state.playerNames[1] = 'Computer';
+    state.singlePlayer = true;      
+  }
   startGame();
 });
 playerTurnElem.addEventListener('click', function (event) {
