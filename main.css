@@ -63,6 +63,71 @@ main {
   margin: 24px;
 }
 
+.next-game {
+  margin-top: 35px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.reset {
+  border: 0;
+  margin-top: 15px;
+  width: 192px;    
+  font-weight: bold;
+  background-color: #00ff62;
+  color: #ffffff;
+  border-radius: 20px;
+  text-align: center;
+  font-size: 21px;
+  font-family: "Encode Sans SC", sans-serif;  
+  border: 1px solid #ffffff;
+  text-shadow:
+    -1px -1px 0 #004094, 
+    1px -1px 0 #004094,
+    -1px 1px 0 #004094,
+    1px 1px 0 #004094;
+}
+
+.reset:hover {
+  transform: scale(1.25, 1.25);
+  box-shadow:
+    -1px -1px 0 #00ff62, 
+    1px -1px 0 #00ff62,
+    -1px 1px 0 #00ff62,
+    1px 1px 0 #00ff62;
+}
+
+.restart {
+  border: 0;
+  margin-top: 25px;
+  width: 192px;    
+  font-weight: bold;
+  background-color: #ff0000;
+  color: #ffffff;
+  border-radius: 20px;
+  text-align: center;
+  font-size: 21px;
+  font-family: "Encode Sans SC", sans-serif;  
+  border: 1px solid #ffffff;
+  text-shadow:
+    -1px -1px 0 #004094, 
+    1px -1px 0 #004094,
+    -1px 1px 0 #004094,
+    1px 1px 0 #004094;
+}
+
+.restart:hover{
+  transform: scale(1.25, 1.25);
+  box-shadow:
+    -1px -1px 0 #ff0000, 
+    1px -1px 0 #ff0000,
+    -1px 1px 0 #ff0000,
+    1px 1px 0 #ff0000;
+}
+
+
 .game-over {
   color: #ffffff;
 }

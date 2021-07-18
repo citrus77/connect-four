@@ -32,8 +32,6 @@ const boardElem = document.querySelector('#board');
 const playerTurnElem = document.querySelector('#player-turn');
 const scoreElem1 = document.querySelector('#score-p1');
 const scoreElem2 = document.querySelector('#score-p2');
-const resetElem = document.querySelector('#reset')
-const restartElem = document.querySelector('#restart')
 
 
 // ***************** DOM MANIPULATION FUNCTIONS *****************
@@ -60,25 +58,29 @@ const renderPlayer = () => {
       <input name='player1' class='p1name' placeholder='Enter Player 1'>
       <input name='player2' class='p2name' placeholder='Enter Player 2'>
       <button class='start'>GO!</button>
-    `
+    `;
   }
   else if (state.isDraw) {    
     text = `
-      <span class='game-over'>The game is a draw!</span>   
-      <button class='reset'>Play Again!</button>
-      <button class='restart'>Restart Game</button>
-    `
+      <div class='next-game'>
+        <span class='game-over'>The game is a draw!</span>   
+        <button class='reset'>Play Again!</button>
+        <button class='restart'>Restart Game</button>
+      </div>
+    `;
   }
   else if (!state.isDraw && !state.inProgress) {
     text = `
-    <span class='game-over'>${state.getCurrentPlayer()} wins!</span> 
-    <button class='reset'>Play Again!</button>
-    <button class='restart'>Restart Game</button>
-    `
+    <div class='next-game'>
+      <span class='game-over'>${state.getCurrentPlayer()} wins!</span> 
+      <button class='reset'>Play Again!</button>
+      <button class='restart'>Restart Game</button>
+    </div>
+    `;
   }
   else {
-    text = `It's currently ${state.getCurrentPlayer()}'s turn.`;
-  }    
+    text = `It's currently ${state.getCurrentPlayer()}'s turn.`
+  };    
   playerTurnElem.innerHTML = text;
 };
 
@@ -145,7 +147,11 @@ const dropInCol = (event) => {
   };
 };
 
-//Functions to check when a player wins
+// const versusCPU = () => {
+  
+// };
+
+//******* FUNCTIONS TO CHECK WHEN GAME OVER **********
 //If all spots are taken and none have 'circle' class declare draw
 const checkDraw = () => {
   let count = 0
@@ -162,10 +168,8 @@ const checkDraw = () => {
   return;
 };
 
-// const versusCPU = () => {
-  
-// };
-
+//If winner functions (moved to checkWin.js)
+//or checkDraw return true then game over
 const checkWon = () => {
   if (state.currentPlayerIdx === 0) checkP1Win();
   if (state.currentPlayerIdx === 1) checkP2Win();
@@ -197,11 +201,7 @@ const render = () => {
 };
 
 
-const startGame = (event) => {
-  if (event.target.className !== 'start') {
-    state.inProgress = true;
-    return;
-  }
+const startGame = () => {  
   const player1Input = document.querySelector('input[name=player1]');
   state.playerNames[0] = player1Input.value;
   const player2Input = document.querySelector('input[name=player2]');
@@ -224,31 +224,38 @@ const gameOver = () => {
   state.inProgress = false;
 }
 
-const resetBoard = () => {
-  let scores = state.scores;
-  let playerNames = state.playerNames;
-  resetState();
-  render()
-  state.scores = scores;
-  state.playerNames = playerNames;  
+const playAgain = () => {
+  state.board = [];
+  for (let i = 0; i < 6; i++) {
+    state.board.push(['circle', 'circle', 'circle', 'circle', 'circle', 'circle', 'circle'])
+  };
+  state.board = state.board;
+  state.inProgress = true;
+  state.isDraw = false;
+  render();
 };
 
 const restartGame = () => {
-  let scores = state.scores;
-  let playerNames = state.playerNames;
   resetState();
-  state.scores = scores;
-  state.playerNames = playerNames;
-}
+  render();
+};
 
 
 // **************** EVENT LISTERNERS *****************
 board.addEventListener('click', playerMove);
-playerTurnElem.addEventListener('click', startGame);
-// playerTurnElem.addEventListener('click', function (event) {
-//   if (event.target.className === 'reset') resetBoard();
-// })
-// playerTurnElem.addEventListener('click', restartGame)
+playerTurnElem.addEventListener('click',function (event) {
+  if (event.target.className !== 'start') return;
+  else state.inProgress = true;
+  startGame();
+});
+playerTurnElem.addEventListener('click', function (event) {
+  if (event.target.className !== 'reset') return;
+  else playAgain();
+});
+playerTurnElem.addEventListener('click', function (event) {
+  if (event.target.className !== 'restart') return;
+  else restartGame();
+});
 
 // ***************** BOOTSTRAPPING *****************
 resetState();
