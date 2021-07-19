@@ -56,7 +56,7 @@ const checkP1Win = () => {
   if (state.board[5][0] === 'p1move' && state.board[4][1] === 'p1move' && state.board[3][2] === 'p1move' && state.board[2][3] === 'p1move') return true;    
   if (state.board[0][6] === 'p1move' && state.board[1][5] === 'p1move' && state.board[2][4] === 'p1move' && state.board[3][3] === 'p1move') return true;
   if (state.board[4][0] === 'p1move' && state.board[3][1] === 'p1move' && state.board[2][2] === 'p1move' && state.board[1][3] === 'p1move') return true;
-  if (state.board[1][6] === 'p1move' && state.board[1][5] === 'p1move' && state.board[3][4] === 'p1move' && state.board[4][3] === 'p1move') return true;
+  if (state.board[1][6] === 'p1move' && state.board[2][5] === 'p1move' && state.board[3][4] === 'p1move' && state.board[4][3] === 'p1move') return true;
   if (state.board[3][0] === 'p1move' && state.board[2][1] === 'p1move' && state.board[1][2] === 'p1move' && state.board[0][3] === 'p1move') return true;
   if (state.board[2][6] === 'p1move' && state.board[3][5] === 'p1move' && state.board[4][4] === 'p1move' && state.board[5][3] === 'p1move') return true;
   if (state.board[5][1] === 'p1move' && state.board[4][2] === 'p1move' && state.board[3][3] === 'p1move' && state.board[2][4] === 'p1move') return true;
@@ -67,7 +67,7 @@ const checkP1Win = () => {
   if (state.board[5][4] === 'p1move' && state.board[4][3] === 'p1move' && state.board[3][2] === 'p1move' && state.board[2][1] === 'p1move') return true;
   if (state.board[0][1] === 'p1move' && state.board[1][2] === 'p1move' && state.board[2][3] === 'p1move' && state.board[3][4] === 'p1move') return true;
   if (state.board[5][5] === 'p1move' && state.board[4][4] === 'p1move' && state.board[3][3] === 'p1move' && state.board[2][2] === 'p1move') return true;
-  if (state.board[1][2] === 'p1move' && state.board[1][0] === 'p1move' && state.board[3][4] === 'p1move' && state.board[4][5] === 'p1move') return true;
+  if (state.board[1][2] === 'p1move' && state.board[2][3] === 'p1move' && state.board[3][4] === 'p1move' && state.board[4][5] === 'p1move') return true;
   if (state.board[1][1] === 'p1move' && state.board[2][2] === 'p1move' && state.board[3][3] === 'p1move' && state.board[4][4] === 'p1move') return true;
   if (state.board[1][4] === 'p1move' && state.board[2][3] === 'p1move' && state.board[3][2] === 'p1move' && state.board[4][1] === 'p1move') return true;
   if (state.board[1][5] === 'p1move' && state.board[2][4] === 'p1move' && state.board[3][3] === 'p1move' && state.board[4][2] === 'p1move') return true;
@@ -131,7 +131,7 @@ const checkP2Win = () => {
   if (state.board[5][0] === 'p2move' && state.board[4][1] === 'p2move' && state.board[3][2] === 'p2move' && state.board[2][3] === 'p2move') return true;    
   if (state.board[0][6] === 'p2move' && state.board[1][5] === 'p2move' && state.board[2][4] === 'p2move' && state.board[3][3] === 'p2move') return true;
   if (state.board[4][0] === 'p2move' && state.board[3][1] === 'p2move' && state.board[2][2] === 'p2move' && state.board[1][3] === 'p2move') return true;
-  if (state.board[1][6] === 'p2move' && state.board[1][5] === 'p2move' && state.board[3][4] === 'p2move' && state.board[4][3] === 'p2move') return true;
+  if (state.board[1][6] === 'p2move' && state.board[2][5] === 'p2move' && state.board[3][4] === 'p2move' && state.board[4][3] === 'p2move') return true;
   if (state.board[3][0] === 'p2move' && state.board[2][1] === 'p2move' && state.board[1][2] === 'p2move' && state.board[0][3] === 'p2move') return true;
   if (state.board[2][6] === 'p2move' && state.board[3][5] === 'p2move' && state.board[4][4] === 'p2move' && state.board[5][3] === 'p2move') return true;
   if (state.board[5][1] === 'p2move' && state.board[4][2] === 'p2move' && state.board[3][3] === 'p2move' && state.board[2][4] === 'p2move') return true;
@@ -142,7 +142,7 @@ const checkP2Win = () => {
   if (state.board[5][4] === 'p2move' && state.board[4][3] === 'p2move' && state.board[3][2] === 'p2move' && state.board[2][1] === 'p2move') return true;
   if (state.board[0][1] === 'p2move' && state.board[1][2] === 'p2move' && state.board[2][3] === 'p2move' && state.board[3][4] === 'p2move') return true;
   if (state.board[5][5] === 'p2move' && state.board[4][4] === 'p2move' && state.board[3][3] === 'p2move' && state.board[2][2] === 'p2move') return true;
-  if (state.board[1][2] === 'p2move' && state.board[1][0] === 'p2move' && state.board[3][4] === 'p2move' && state.board[4][5] === 'p2move') return true;
+  if (state.board[1][2] === 'p2move' && state.board[2][3] === 'p2move' && state.board[3][4] === 'p2move' && state.board[4][5] === 'p2move') return true;
   if (state.board[1][1] === 'p2move' && state.board[2][2] === 'p2move' && state.board[3][3] === 'p2move' && state.board[4][4] === 'p2move') return true;
   if (state.board[1][4] === 'p2move' && state.board[2][3] === 'p2move' && state.board[3][2] === 'p2move' && state.board[4][1] === 'p2move') return true;
   if (state.board[1][5] === 'p2move' && state.board[2][4] === 'p2move' && state.board[3][3] === 'p2move' && state.board[4][2] === 'p2move') return true;
